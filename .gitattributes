@@ -1,2 +1,2 @@
-*.cs linguist-language=C#
-*.ico linguist-language=C#
+*.html linguist-language=c++
+*.ico linguist-language=c++

@@ -1,2 +1,2 @@
-*.cs linguist-language=c++
-*.ico linguist-language=c++
+*.cs linguist-language=cpp
+*.ico linguist-language=cpp

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Engine</title>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="icon" href="./fno.jpg" type="image/x-icon"/>
+</head>
+
+
+
+<body>
+    <div class="all" id="oper">
+        <div class="title">
+            <h2>Online Search Engine for C++ Boost Library</h2>
+        </div>
+
+        <br></br>
+
+        <!-- 搜索栏目 begin-->
+        <div class="column">
+            <input type="search" />
+            <button class="searchButton" v-on:click="search()"> <img src="./fno2.png" height ="30" width="30" />
+            </button>
+        </div>
+        <!-- 搜索栏目 end -->
+        <br></br>
+        <!-- 显示结果 begin -->
+        <div class="content">
+            <div class="info">
+                <h2>
+                    <!-- </br> -->
+                </h2>
+            </div>
+        </div>
+        <!-- 显示结果 end -->
+        <!-- <br></br> -->
+        <div class="page">
+            <button class="prev" v-on:click="prepage()" style="visibility:hidden">←</button>
+            <button class="next" v-on:click="nextpage()" style="visibility:hidden">→</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+
+    <script>
+        var oper = new Vue({
+            el: '#oper',
+            data: {
+                len: 10,// 一个页面显示搜索记录条数
+                idx: 0, // 当前页号
+                cnt: 0, // 总页号
+                infos: []
+            },
+            methods: {
+                //成功搜索后执行build()
+                build: function() {
+                    //搜索结果展示的部分
+                    var result = $(".content");//$()就类似于document.getElementById()这样的函数的简化调用，根据类名和结构名来查找
+                    //将上一次搜索的结果清空
+                    result.empty();
+                    
+                    //显示上一页和下一页的按钮
+                    var Button = $(".page button");
+                    Button[0].style.visibility = 'visible';
+                    Button[1].style.visibility = 'visible';
+                    
+                    //将搜索结果粘贴在content上
+                    for (var i = this.idx * this.len, j = 0; i < this.infos.length && j < this.len; i++, j++) {
+                        var title = $("<a>", {
+                            text: this.infos[i].title,
+                            href: this.infos[i].url,//点击后可以跳转到指定链接
+                            target: "_blank"
+                        });
+                    
+                        var desc = $("<p>", {
+                            text: this.infos[i].desc
+                        });
+
+                        var url = $("<i>", {
+                            text: this.infos[i].url
+                        });
+
+                        var item = $("<div>", {
+                            class: "info"
+                        });
+
+                        title.appendTo(item);
+                        desc.appendTo(item);
+                        url.appendTo(item);
+
+                        item.appendTo(result);
+                    }
+                },
+                
+                //浏览器请求成功发送给服务器并获得响应后，执行slove()
+                slove: function() {
+                    var result = $(".content");
+                    result.empty();
+
+                    this.idx = 0;
+                    this.cnt = 0;
+
+                    //如果搜索结果为空
+                    if (this.infos === null) {
+                        this.infos = [];
+                        alert("404 Not Found");
+
+                        var notFound = $("<h2>", {
+                            text: "404 Not Found"
+                        });
+                        
+                        var Button = $(".page button");
+                        Button[0].style.visibility = 'hidden';
+                        Button[1].style.visibility = 'hidden';
+
+                        notFound.appendTo(result);
+                        return;
+                    }
+                    
+                    //搜索结果不为空就调用build()
+                    this.cnt = Math.floor(this.infos.length / this.len) ;
+                    this.build();
+                },
+                
+                //点击搜索图标，页面就执行search()，浏览器将数据封装后发送给服务器
+                search: function() {
+                    //获得输入框里的内容
+                    var query = $(".column input").val();
+
+                    if (query.length === 0) {
+                        alert("请输入搜索内容");
+                        return;
+                    }
+                    
+                    alert(query);
+                    $.ajax({
+                        //请求类型
+                        type: "get",
+
+                        //问号提示的是后面的内容当成参数发给服务器
+                        //参数query就是要的搜索内容，由浏览器发给服务器
+                        url: "searcher?query=" + query,
+
+                        context: this,
+
+                        //succes决定请求成功后调用的回调函数
+                        //data存放的是服务器返回的内容
+                        success: function(data, status) {
+                            this.infos = data;
+                            this.slove();
+                        }
+                    });
+                },
+
+                //点击上一页
+                prepage: function() {
+                    if (this.idx <= 0) {
+                        this.idx = 0;
+                        alert("已经是首页了");
+                        return;
+                    }
+                    this.idx = this.idx - 1;
+                    this.build();
+                },
+
+                //点击下一页
+                nextpage: function() {
+                    if (this.idx >= this.cnt) {
+                        alert("已经是尾页了");
+                        return;
+                    }
+                    this.idx = this.idx + 1;
+                    this.build();
+                },
+            }
+        });
+    </script>
+</body>
+
+</html>

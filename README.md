@@ -14,13 +14,13 @@
 
 - 搜索前
 
-<img src="C:\Users\mi\Desktop\project\cpp-search-engine\pic\1.png" alt="1" style="zoom: 67%;" />
+![1.png](https://github.com/ChongbinZhao/cpp-search-engine/blob/master/pic/1.png?raw=true)
 
 <br>
 
 - 搜索后
 
-<img src="C:\Users\mi\Desktop\project\cpp-search-engine\pic\2.png" alt="1" style="zoom: 67%;" />
+![2.png](https://github.com/ChongbinZhao/cpp-search-engine/blob/master/pic/2.png?raw=true)
 
 <br></br>
 
@@ -72,9 +72,7 @@
 
 - 服务端的搭建我们可以调用一个叫做[`cpp-httplib`](https://github.com/yhirose/cpp-httplib)的`http`开源库，这个开源仅包含一个头文件，但是代码多达8000行。
 - `cpp-httplib`服务端采用的是`IO`多路复用模型是`select`（通常`epoll`的性能更好 ），以线程池的方式来处理客户端连接，主要有`Server`，`Client`，`Request`和`Response`这几种类，项目中只用到`Server`类。
-- 服务端Server工作流程如下图所示
-
-<img src="C:\Users\mi\Desktop\project\cpp-search-engine\pic\3.png" alt="3" style="zoom:67%;" />
+- 服务端Server工作流程如下图所示![3.png](https://github.com/ChongbinZhao/cpp-search-engine/blob/master/pic/3.png?raw=true)
 
 - 主要代码：
 
@@ -114,7 +112,7 @@
 - `Boost`官方提供了所有`Boost`函数的`HTML`源文件，我们可以先从官网下载压缩包，整个压缩包一共包含5827个有效`HTML`，每个`HTML`文件可以按照["标题"，"网址"，"正文内容"] 三个部分来划分。
 - 在服务端启动之前，我们将所有的`HTML`文件以[“id”，标题"，"网址"，"正文内容"]的格式存储到`MySQL`数据表里，表结构如下图所示
 
-![4](C:\Users\mi\Desktop\project\cpp-search-engine\pic\4.png)
+![4.png](https://github.com/ChongbinZhao/cpp-search-engine/blob/master/pic/4.png?raw=true)
 
 <br>
 
@@ -220,7 +218,7 @@
 
   - `TF-IDF`的值其实就是两个词的乘积，即`TF-IDF = TF * IDF`。
 
-- **搜索过程原理图**![5](C:\Users\mi\Desktop\project\cpp-search-engine\pic\5.png)
+- **搜索过程原理图**![5.png](https://github.com/ChongbinZhao/cpp-search-engine/blob/master/pic/5.png?raw=true)
 
 
 

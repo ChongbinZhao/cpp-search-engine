@@ -253,7 +253,7 @@ namespace searcher {
         //  获取一个redis连接
         Redis* con = NULL;
         connectionRAII instance(&con, m_RedisConnectionPool);   //instance离开作用域析构的同时还会释放con连接，RAII机制就体现在这里
-
+        
         //  redis查询命中，命中后重置一下过期时间（30分钟=1800秒）
         string res = con->get(words_sequnce);
         if(res.size() != 0 && res != "nil")
@@ -270,7 +270,7 @@ namespace searcher {
             *output = "";
             return true;
         }
-
+        
         //  redis查询命中未命中，根据分词的结果，进行倒排索引，得到相关文档
         vector<backwardIdx> wordsResult;
         for(string word : words){

@@ -6,7 +6,7 @@
 #include "parser.hpp"
 #include "SetTitle.hpp"
 
-// é»˜è®¤ç›‘å¬ç«¯å£
+// Ä¬ÈÏ¼àÌı¶Ë¿Ú
 #define LISTENPORT  19998
 #define FILENAME    "my.conf"
 
@@ -14,13 +14,13 @@ searcher::Searcher searchf;
 bool ret = true;
 
 void GetWebData(const httplib::Request& req,httplib::Response& resp){
-    //  æµè§ˆå™¨å°†æœç´¢æ¡†é‡Œçš„å†…å®¹é€šè¿‡å‚æ•°queryå‘é€ç»™æœåŠ¡å™¨è‹¥
+    //  ä¯ÀÀÆ÷½«ËÑË÷¿òÀïµÄÄÚÈİÍ¨¹ı²ÎÊıquery·¢ËÍ¸ø·şÎñÆ÷
     if(!req.has_param("query")){
-        resp.set_content("è¯·æ±‚å‚æ•°é”™è¯¯","text/plain;charset=utf-8");
+        resp.set_content("Empty query!","text/plain;charset=utf-8");
         return ;
     }
     
-    //  è·å–å‚æ•°å€¼
+    //  »ñÈ¡²ÎÊıÖµ
     string query = req.get_param_value("query");
     string results;
     searchf.Search(query,&results);
@@ -30,18 +30,18 @@ void GetWebData(const httplib::Request& req,httplib::Response& resp){
 }
 
 
-//  è¿™ä¸ªå‡½æ•°çš„ä½œç”¨å°±æ˜¯è®©ç¨‹åºä»¥å®ˆæŠ¤è¿›ç¨‹çš„æ–¹å¼åœ¨åå°è¿è¡Œ
+//  Õâ¸öº¯ÊıµÄ×÷ÓÃ¾ÍÊÇÈÃ³ÌĞòÒÔÊØ»¤½ø³ÌµÄ·½Ê½ÔÚºóÌ¨ÔËĞĞ
 bool init(int argc,char* argv[]) {
-    Read(FILENAME);             // è¯»å–é…ç½®æ–‡ä»¶ä¸­çš„ä¿¡æ¯ï¼Œå¹¶å°†å‚æ•°ä¿å­˜åœ¨_infoåˆ—è¡¨é‡Œ
+    Read(FILENAME);             // ¶ÁÈ¡ÅäÖÃÎÄ¼şÖĞµÄĞÅÏ¢£¬²¢½«²ÎÊı±£´æÔÚ_infoÁĞ±íÀï
 
     ProTitle pt(argc,argv);
-    ret = pt.MoveOsEnv();       // ç¯å¢ƒå˜é‡æ¬å®¶
+    ret = pt.MoveOsEnv();       // »·¾³±äÁ¿°á¼Ò
     if(ret == false) {
         cout << "move os environ error" << endl;
         return false;
     }
     
-    cout << GetString("pro_name") << endl; // å®ˆæŠ¤è¿›ç¨‹çš„åç§°ï¼ˆæ–¹ä¾¿æœç´¢ï¼‰
+    cout << GetString("pro_name") << endl; // ÊØ»¤½ø³ÌµÄÃû³Æ£¨·½±ãËÑË÷£©
     ret = pt.SetProcTitle(GetString("pro_name").c_str());
     if(ret == false) {
         cout << "set title error" << endl;
@@ -59,10 +59,10 @@ bool init(int argc,char* argv[]) {
 
 
 int main(int argc,char* argv[]){
-    // è®¾ç½®è¿›ç¨‹æ ‡é¢˜ï¼Œä»¥å®ˆæŠ¤è¿›ç¨‹ï¼ˆä¿è¯æ°¸è¿œéƒ½æ˜¯è¿è¡Œåœ¨åå°ï¼‰æ–¹å¼è¿è¡Œ
+    // ÉèÖÃ½ø³Ì±êÌâ£¬ÒÔÊØ»¤½ø³Ì£¨±£Ö¤ÓÀÔ¶¶¼ÊÇÔËĞĞÔÚºóÌ¨£©·½Ê½ÔËĞĞ
     init(argc, argv); 
 
-    // Init()åˆ›å»ºredisè¿æ¥æ± å’Œç´¢å¼•
+    // Init()´´½¨redisÁ¬½Ó³ØºÍË÷Òı
     ret = searchf.Init();
     if(ret == false){
         cout<<"Searcher init failed!"<<endl;
@@ -72,13 +72,13 @@ int main(int argc,char* argv[]){
     using namespace httplib;
     Server server;
 
-    // è®¾ç½®å‰ç«¯æ–‡ä»¶çš„æ ¹ç›®å½•: wwwroot = "./WWW"
+    // ÉèÖÃÇ°¶ËÎÄ¼şµÄ¸ùÄ¿Â¼: wwwroot = "./WWW"
     ret = server.set_base_dir( GetString("wwwroot").c_str());
     
-    // å»ºç«‹ å›è°ƒå‡½æ•° ä¸ ç½‘å€ æ˜ å°„
+    // ½¨Á¢ »Øµ÷º¯Êı Óë ÍøÖ· Ó³Éä
     server.Get("/searcher",GetWebData);
     
-    // å»ºç«‹ç›‘å¬,ä¸»è¿›ç¨‹ä¼šé˜»å¡åœ¨listenè¿™é‡Œ
+    // ½¨Á¢¼àÌı,Ö÷½ø³Ì»á×èÈûÔÚlistenÕâÀï
     ret = server.listen( GetString("listenIp").c_str(),GetInt("listenPort",19998));
     if(!ret) cout << " server.listen() failed! " << endl;
     
